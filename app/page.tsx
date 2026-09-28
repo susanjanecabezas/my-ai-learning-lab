@@ -88,18 +88,18 @@ export default function Home(){
  const [activeLesson,setActiveLesson]=useState<number|null>(null);
  const [done,setDone]=useState<boolean[]>(()=>JSON.parse(typeof window!=="undefined"&&localStorage.getItem("ai-lab-done")||"[false,false,false,false,false]"));
  const [notes,setNotes]=useState(()=>typeof window!=="undefined"?localStorage.getItem("ai-lab-notes")||"":"");
- const [reflection,setReflection]=useState(()=>typeof window!=="undefined"?localStorage.getItem("ai-lab-reflection")||"":"");
+ const [reflections,setReflections]=useState<string[]>(()=>JSON.parse(typeof window!=="undefined"&&localStorage.getItem("ai-lab-reflections")||'["","","","",""]'));
  const pct=Math.round(done.filter(Boolean).length/done.length*100);
  const next=done.findIndex(x=>!x);
  const toggle=(i:number)=>{const n=[...done];n[i]=!n[i];setDone(n);localStorage.setItem("ai-lab-done",JSON.stringify(n));};
  const saveNotes=(v:string)=>{setNotes(v);localStorage.setItem("ai-lab-notes",v)};
- const saveReflection=(v:string)=>{setReflection(v);localStorage.setItem("ai-lab-reflection",v)};
+ const saveReflection=(i:number,v:string)=>{const n=[...reflections];n[i]=v;setReflections(n);localStorage.setItem("ai-lab-reflections",JSON.stringify(n))};
  const openLesson=(i:number)=>{setActiveLesson(i);setTab("Lesson");window.scrollTo({top:0,behavior:"smooth"})};
 
  const content=useMemo(()=>{
   if(tab==="Lesson"&&activeLesson!==null){
    const l=lessons[activeLesson];
-   return <section className="lesson-page"><button className="back" onClick={()=>setTab("Home")}>← Back to dashboard</button><div className="lesson-shell"><div className="eyebrow">Week 1 · Lesson {activeLesson+1}</div><h2>{l.title}</h2><div className="meta"><span>⏱ {l.time}</span><span>🏷 {l.tag}</span></div><p className="lead">{l.summary}</p><div className="lesson-body">{l.body}</div><div className="reflection"><h3>✍️ Lab note</h3><p>{l.challenge}</p><textarea value={reflection} onChange={e=>saveReflection(e.target.value)} placeholder="Write a quick note here. It saves automatically in this browser."/></div><button className="primary" onClick={()=>{if(!done[activeLesson])toggle(activeLesson);setTab("Home")}}>{done[activeLesson]?"Return to dashboard":"Mark complete & return"}</button></div></section>
+   return <section className="lesson-page"><button className="back" onClick={()=>setTab("Home")}>← Back to dashboard</button><div className="lesson-shell"><div className="eyebrow">Week 1 · Lesson {activeLesson+1}</div><h2>{l.title}</h2><div className="meta"><span>⏱ {l.time}</span><span>🏷 {l.tag}</span></div><p className="lead">{l.summary}</p><div className="lesson-body">{l.body}</div><div className="reflection"><h3>✍️ Lab note</h3><p>{l.challenge}</p><textarea value={reflections[activeLesson]||""} onChange={e=>saveReflection(activeLesson,e.target.value)} placeholder="Write a quick note here. It saves automatically in this browser."/></div><button className="primary" onClick={()=>{if(!done[activeLesson])toggle(activeLesson);setTab("Home")}}>{done[activeLesson]?"Return to dashboard":"Mark complete & return"}</button></div></section>
   }
   if(tab==="Roadmap") return <section><h2>12-Week Roadmap</h2><p className="lead">The path is structured, but not rigid. We’ll adjust it based on what proves most useful.</p><div className="grid">{weeks.map((w,i)=><article className="card" key={w[0]}><div className="eyebrow">Week {i+1}</div><h3>{w[0]}</h3><p>{w[1]}</p>{i===0&&<button className="text-btn" onClick={()=>{setTab("Home");window.scrollTo(0,0)}}>Open current week →</button>}</article>)}</div></section>;
   if(tab==="Prompt Library") return <section><h2>Prompt Library</h2><div className="card wide"><p>Save prompts worth reusing. Include what the prompt is for and what made it work.</p><textarea value={notes} onChange={e=>saveNotes(e.target.value)} placeholder={"Example:\nCustomer troubleshooting intake\nPrompt: ...\nWhy it works: gives role, context and desired output."}/><small>Saved automatically in this browser.</small></div></section>;
@@ -118,7 +118,7 @@ export default function Home(){
     <article className="card"><div className="eyebrow">Week 1 outcome</div><h3>What you'll be able to explain</h3><ul className="clean-list"><li>What generative AI is actually doing</li><li>Why context improves results</li><li>Why polished answers still need verification</li><li>How to create a reusable prompt for a real task</li></ul><div className="callout">You do not need to memorize AI jargon. The goal is to build useful instincts.</div></article>
    </div>
   </section>
- },[tab,activeLesson,done,notes,reflection,pct,next]);
+ },[tab,activeLesson,done,notes,reflections,pct,next]);
 
  return <main><header><div><div className="brand">🧠 My AI Learning Lab</div><p className="sub">Learn it. Try it. Save what works.</p></div></header><nav>{["Home","Roadmap","Prompt Library","Portfolio","Certification"].map(x=><button className={tab===x?"active":""} onClick={()=>{setTab(x);setActiveLesson(null)}} key={x}>{x}</button>)}</nav>{content}</main>
 }
