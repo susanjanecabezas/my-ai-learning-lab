@@ -1,0 +1,1 @@
+import "./styles.css"; export const metadata={title:"My AI Learning Lab",description:"A 12-week practical AI learning portal"}; export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body>{children}</body></html>}
