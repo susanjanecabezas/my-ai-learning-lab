@@ -16,6 +16,29 @@ const weeks=[
 ["Certification & Portfolio","Prepare for a credential and package your strongest projects."]
 ];
 
+const resources=[
+[
+ {label:"Microsoft Learn · Explore Generative AI",meta:"Interactive module · ~37 min",url:"https://learn.microsoft.com/en-us/training/modules/explore-generative-ai/"},
+ {label:"IBM · What is Generative AI?",meta:"Article · deeper read",url:"https://www.ibm.com/think/topics/generative-ai"}
+],
+[
+ {label:"IBM · What Are Large Language Models?",meta:"Article · how LLM inference works",url:"https://www.ibm.com/think/topics/large-language-models"},
+ {label:"Microsoft Learn · Generative AI Basics",meta:"Beginner module · ~22 min",url:"https://learn.microsoft.com/en-us/training/modules/intro-generative-ai-explore-basics/"}
+],
+[
+ {label:"IBM · What Are AI Hallucinations?",meta:"Article · updated 2026",url:"https://www.ibm.com/think/topics/ai-hallucinations"},
+ {label:"IBM · Generative Models & Hallucinations",meta:"Article · examples + mitigation",url:"https://www.ibm.com/think/topics/generative-model"}
+],
+[
+ {label:"IBM · Prompt Engineering Techniques",meta:"Article · practical techniques",url:"https://www.ibm.com/think/topics/prompt-engineering-techniques"},
+ {label:"IBM · What Is Context Engineering?",meta:"Article · beyond prompts",url:"https://www.ibm.com/think/topics/context-engineering"}
+],
+[
+ {label:"IBM · What Is Prompt Engineering?",meta:"Article · consolidate Week 1",url:"https://www.ibm.com/think/topics/prompt-engineering"},
+ {label:"Microsoft Learn · Explore Generative AI",meta:"Module · optional review",url:"https://learn.microsoft.com/en-us/training/modules/explore-generative-ai/"}
+]
+];
+
 const lessons=[
 {
  title:"What is generative AI?",time:"25–30 min",tag:"Learn",
@@ -99,7 +122,7 @@ export default function Home(){
  const content=useMemo(()=>{
   if(tab==="Lesson"&&activeLesson!==null){
    const l=lessons[activeLesson];
-   return <section className="lesson-page"><button className="back" onClick={()=>setTab("Home")}>← Back to dashboard</button><div className="lesson-shell"><div className="eyebrow">Week 1 · Lesson {activeLesson+1}</div><h2>{l.title}</h2><div className="meta"><span>⏱ {l.time}</span><span>🏷 {l.tag}</span></div><p className="lead">{l.summary}</p><div className="lesson-body">{l.body}</div><div className="reflection"><h3>✍️ Lab note</h3><p>{l.challenge}</p><textarea value={reflections[activeLesson]||""} onChange={e=>saveReflection(activeLesson,e.target.value)} placeholder="Write a quick note here. It saves automatically in this browser."/></div><button className="primary" onClick={()=>{if(!done[activeLesson])toggle(activeLesson);setTab("Home")}}>{done[activeLesson]?"Return to dashboard":"Mark complete & return"}</button></div></section>
+   return <section className="lesson-page"><button className="back" onClick={()=>setTab("Home")}>← Back to dashboard</button><div className="lesson-shell"><div className="eyebrow">Week 1 · Lesson {activeLesson+1}</div><h2>{l.title}</h2><div className="meta"><span>⏱ {l.time}</span><span>🏷 {l.tag}</span></div><p className="lead">{l.summary}</p><div className="lesson-body">{l.body}</div><div className="learn-more"><h3>📚 Learn More <span>Optional</span></h3><p>Want to go deeper? These resources complement this lesson.</p><div className="resource-list">{resources[activeLesson].map(r=><a key={r.url} href={r.url} target="_blank" rel="noreferrer"><strong>{r.label}</strong><small>{r.meta}</small><b>↗</b></a>)}</div></div><div className="reflection"><h3>✍️ Lab note</h3><p>{l.challenge}</p><textarea value={reflections[activeLesson]||""} onChange={e=>saveReflection(activeLesson,e.target.value)} placeholder="Write a quick note here. It saves automatically in this browser."/></div><button className="primary" onClick={()=>{if(!done[activeLesson])toggle(activeLesson);setTab("Home")}}>{done[activeLesson]?"Return to dashboard":"Mark complete & return"}</button></div></section>
   }
   if(tab==="Roadmap") return <section><h2>12-Week Roadmap</h2><p className="lead">The path is structured, but not rigid. We’ll adjust it based on what proves most useful.</p><div className="grid">{weeks.map((w,i)=><article className="card" key={w[0]}><div className="eyebrow">Week {i+1}</div><h3>{w[0]}</h3><p>{w[1]}</p>{i===0&&<button className="text-btn" onClick={()=>{setTab("Home");window.scrollTo(0,0)}}>Open current week →</button>}</article>)}</div></section>;
   if(tab==="Prompt Library") return <section><h2>Prompt Library</h2><div className="card wide"><p>Save prompts worth reusing. Include what the prompt is for and what made it work.</p><textarea value={notes} onChange={e=>saveNotes(e.target.value)} placeholder={"Example:\nCustomer troubleshooting intake\nPrompt: ...\nWhy it works: gives role, context and desired output."}/><small>Saved automatically in this browser.</small></div></section>;
