@@ -1,0 +1,7 @@
+{
+  "name": "my-ai-learning-lab",
+  "private": true,
+  "scripts": {"dev":"next dev","build":"next build","start":"next start"},
+  "dependencies": {"next":"^15.5.2","react":"^19.1.0","react-dom":"^19.1.0"},
+  "devDependencies": {"typescript":"^5.8.3","@types/node":"^22.15.3","@types/react":"^19.1.2","@types/react-dom":"^19.1.2"}
+}
